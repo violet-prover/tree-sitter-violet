@@ -1,7 +1,6 @@
 # tree-sitter-violet
 
-A [tree-sitter](https://tree-sitter.github.io/) grammar for the
-[violet](https://github.com/dannypsnl/violet) dependently-typed language.
+A [tree-sitter](https://tree-sitter.github.io/) grammar for the violet dependently-typed language.
 
 This is a **simple** grammar: it recognises violet's keywords, built-in
 symbols, and the structure of top-level declarations (`\let`, `\data`,
