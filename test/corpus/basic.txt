@@ -1,0 +1,192 @@
+================================================================================
+import and export
+================================================================================
+\import nat
+\import nat/properties
+\export foo bar
+--------------------------------------------------------------------------------
+
+(source_file
+  (import_decl
+    path: (qualified_name (identifier)))
+  (import_decl
+    path: (qualified_name (identifier) (identifier)))
+  (export_decl
+    (identifier)
+    (identifier)))
+
+================================================================================
+data declaration
+================================================================================
+\data Nat : U
+  | zero : Nat
+  | suc : Nat -> Nat
+--------------------------------------------------------------------------------
+
+(source_file
+  (data_decl
+    name: (identifier)
+    signature: (qualified_name (identifier))
+    (constructor
+      name: (identifier)
+      type: (qualified_name (identifier)))
+    (constructor
+      name: (identifier)
+      type: (pi_type
+        (qualified_name (identifier))
+        (qualified_name (identifier))))))
+
+================================================================================
+record declaration with projection
+================================================================================
+\record Pair (A : U) (B : U) : U
+  | fst : A
+  | snd : B
+
+\let p : Pair Nat Nat => { fst = Nat/zero, snd = Nat/zero }
+\let p-fst : Nat => p.fst
+--------------------------------------------------------------------------------
+
+(source_file
+  (record_decl
+    name: (identifier)
+    (explicit_binder
+      (identifier)
+      (qualified_name (identifier)))
+    (explicit_binder
+      (identifier)
+      (qualified_name (identifier)))
+    signature: (qualified_name (identifier))
+    (field_decl
+      name: (identifier)
+      type: (qualified_name (identifier)))
+    (field_decl
+      name: (identifier)
+      type: (qualified_name (identifier))))
+  (let_decl
+    name: (identifier)
+    signature: (qualified_name (identifier))
+    signature: (qualified_name (identifier))
+    signature: (qualified_name (identifier))
+    body: (atom
+      (record_literal
+        (identifier)
+        (qualified_name (identifier) (identifier))
+        (identifier)
+        (qualified_name (identifier) (identifier)))))
+  (let_decl
+    name: (identifier)
+    signature: (qualified_name (identifier))
+    body: (projection
+      base: (qualified_name (identifier))
+      field: (identifier))))
+
+================================================================================
+let with where and elim
+================================================================================
+\let add : (m n : Nat) -> Nat \where
+  add m n <= \elim m
+  | add zero n => n
+  | add (suc m) n => suc (add m n)
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_decl
+    name: (identifier)
+    signature: (pi_type
+      (explicit_binder
+        (identifier)
+        (identifier)
+        (qualified_name (identifier)))
+      (qualified_name (identifier)))
+    (where_block
+      (elim_header
+        head: (identifier)
+        (identifier)
+        (identifier)
+        target: (identifier))
+      (clause
+        head: (identifier)
+        (identifier)
+        (identifier)
+        body: (qualified_name (identifier)))
+      (clause
+        head: (identifier)
+        (con_pattern (identifier) (identifier))
+        (identifier)
+        body: (qualified_name (identifier))
+        body: (atom
+          (parens_term
+            (qualified_name (identifier))
+            (qualified_name (identifier))
+            (qualified_name (identifier))))))))
+
+================================================================================
+operator declaration
+================================================================================
+\operator "~x + ~y" => add
+  \associativity: \left
+--------------------------------------------------------------------------------
+
+(source_file
+  (operator_decl
+    template: (string)
+    body: (qualified_name (identifier))
+    (operator_option
+      (option_associativity
+        (associativity)))))
+
+================================================================================
+lambda and hole
+================================================================================
+\let id (A : U) : A -> A => \x -> x
+\let foo : U => ?
+\let bar : U => ?goal
+--------------------------------------------------------------------------------
+
+(source_file
+  (let_decl
+    name: (identifier)
+    (explicit_binder
+      (identifier)
+      (qualified_name (identifier)))
+    signature: (pi_type
+      (qualified_name (identifier))
+      (qualified_name (identifier)))
+    body: (atom
+      (lambda
+        (identifier)
+        (qualified_name (identifier)))))
+  (let_decl
+    name: (identifier)
+    signature: (qualified_name (identifier))
+    body: (atom
+      (hole)))
+  (let_decl
+    name: (identifier)
+    signature: (qualified_name (identifier))
+    body: (atom
+      (hole (identifier)))))
+
+================================================================================
+comments
+================================================================================
+# top-level comment
+\let x : U => U  # not a comment in violet - hash starts comment
+
+# another
+\let y : U => U
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (let_decl
+    name: (identifier)
+    signature: (qualified_name (identifier))
+    body: (qualified_name (identifier)))
+  (comment)
+  (comment)
+  (let_decl
+    name: (identifier)
+    signature: (qualified_name (identifier))
+    body: (qualified_name (identifier))))

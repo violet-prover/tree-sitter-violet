@@ -1,0 +1,40 @@
+{
+  "name": "tree-sitter-violet",
+  "version": "0.1.0",
+  "description": "Violet grammar for tree-sitter",
+  "main": "bindings/node",
+  "types": "bindings/node",
+  "keywords": [
+    "incremental",
+    "parsing",
+    "tree-sitter",
+    "violet"
+  ],
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "queries/*",
+    "src/**",
+    "bindings/node/*"
+  ],
+  "devDependencies": {
+    "tree-sitter-cli": "^0.25.10"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.21.0"
+  },
+  "peerDependenciesMeta": {
+    "tree-sitter": {
+      "optional": true
+    }
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.violet",
+      "file-types": [
+        "vt"
+      ],
+      "highlights": "queries/highlights.scm"
+    }
+  ]
+}
