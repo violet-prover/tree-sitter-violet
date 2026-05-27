@@ -267,7 +267,7 @@ module.exports = grammar({
 
     // ---------------- Tokens ----------------
 
-    identifier: _ => /[a-zA-Z][a-zA-Z0-9_\-]*/,
+    identifier: _ => /[a-zA-ZÀ-ɏͰ-Ͽ℀-⅏\u{1D400}-\u{1D7FF}][a-zA-Z0-9_\-À-ɏͰ-Ͽ℀-⅏\u{1D400}-\u{1D7FF}]*/u,
 
     // Generic symbol token. We exclude `,`, `/`, `?`, `:`, `.` because they
     // carry structural meaning in this grammar. `=` is included so user
